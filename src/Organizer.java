@@ -13,6 +13,7 @@ public class Organizer {
     }
 
     static List<String> readNotes(String fileName) throws IOException {
+        checkFileExists(fileName);
         List<String> notes = new ArrayList<>();
         for (String line : Files.readAllLines(Paths.get(fileName))) {
             if (!line.isBlank()) {
@@ -23,15 +24,20 @@ public class Organizer {
     }
 
     static Map<String, List<String>> loadTopics(String fileName) throws IOException {
+        checkFileExists(fileName);
         Map<String, List<String>> topics = new LinkedHashMap<>();
         for (String line : Files.readAllLines(Paths.get(fileName))) {
             if (line.isBlank())
                 continue;
             String[] parts = line.split(":", 2);
+            if (parts.length < 2)
+                continue;
             String topic = parts[0].trim();
             List<String> keywords = new ArrayList<>();
             for (String word : parts[1].split(",")) {
-                keywords.add(word.trim().toLowerCase());
+                if (!word.isBlank()) {
+                    keywords.add(word.trim().toLowerCase());
+                }
             }
             topics.put(topic, keywords);
         }
@@ -67,6 +73,7 @@ public class Organizer {
     static void writeOutput(Map<String, List<String>> sorted, String fileName) throws IOException {
         List<String> lines = new ArrayList<>();
         for (String topic : sorted.keySet()) {
+            if (sorted.get(topic).isEmpty()) continue;
             lines.add("## " + topic);
             for (String note : sorted.get(topic)) {
                 lines.add("- " + note);
@@ -74,5 +81,12 @@ public class Organizer {
             lines.add("");
         }
         Files.write(Paths.get(fileName), lines);
+    }
+
+    static void checkFileExists(String fileName) {
+        if (!Files.exists(Paths.get(fileName))) {
+            System.out.println("Error: can't find " + fileName);
+            System.exit(1);
+        }
     }
 }
