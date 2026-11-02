@@ -11,6 +11,10 @@ public class Organizer {
 
         Map<String, List<String>> topics = loadTopics("topics.txt");
         System.out.println(topics);
+
+        System.out.println(findTopic("finish cs180 hw 10 by tuesday", topics));
+        System.out.println(findTopic("tmrrw gym push day", topics));
+        System.out.println(findTopic("listen to more beach weather songs", topics));
     }
 
     static List<String> readNotes(String fileName) throws IOException {
@@ -37,4 +41,16 @@ public class Organizer {
         }
         return topics;
     }
+
+    static String findTopic(String note, Map<String, List<String>> topics) {
+    String lower = note.toLowerCase();
+    for (String topic : topics.keySet()) {
+        for (String keyword : topics.get(topic)) {
+            if (lower.contains(keyword)) {
+                return topic;
+            }
+        }
+    }
+    return "Uncategorized";
+}
 }
