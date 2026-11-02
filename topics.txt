@@ -1,0 +1,4 @@
+Homework: hw, study, quiz, assignment, due, exam
+Gym: gym, equipment, protein, push, pull, legs, abs
+Movies/Show: watch, movie, show, season, trailer, season, episode 
+Music: song, album, playlist, artist, songs, music, listen 
