@@ -8,12 +8,8 @@ public class Organizer {
         Map<String, List<String>> topics = loadTopics("topics.txt");
         Map<String, List<String>> sorted = sortNotes(notes, topics);
 
-        for (String topic : sorted.keySet()) {
-            System.out.println("## " + topic);
-            for (String note : sorted.get(topic)) {
-                System.out.println("- " + note);
-            }
-        }
+        writeOutput(sorted, "organized.txt");
+        System.out.println("Organized " + notes.size() + " notes into organized.txt");
     }
 
     static List<String> readNotes(String fileName) throws IOException {
@@ -66,5 +62,17 @@ public class Organizer {
             sorted.get(topic).add(note);
         }
         return sorted;
+    }
+
+    static void writeOutput(Map<String, List<String>> sorted, String fileName) throws IOException {
+        List<String> lines = new ArrayList<>();
+        for (String topic : sorted.keySet()) {
+            lines.add("## " + topic);
+            for (String note : sorted.get(topic)) {
+                lines.add("- " + note);
+            }
+            lines.add("");
+        }
+        Files.write(Paths.get(fileName), lines);
     }
 }
